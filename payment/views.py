@@ -7,7 +7,7 @@ from rest_framework import status
 from .models import Payment
 from .serializers import PaymentSerializer
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('payment')
 
 class PaymentListView(APIView):
     permission_classes = [IsAuthenticated]

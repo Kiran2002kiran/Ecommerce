@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('shop')
 
 class ProductListView(APIView):
     permission_classes = [IsAuthenticated]

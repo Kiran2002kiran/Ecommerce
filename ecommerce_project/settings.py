@@ -14,6 +14,11 @@ from pathlib import Path
 
 import os
 
+import environ
+env = environ.Env()
+# Reading the .env file
+environ.Env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,12 +28,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p@8o#^&3oi%t^tav+1gadanw-(z5+ndh(*g=p$+1dm%gt9h5%('
+# SECRET_KEY = 'django-insecure-p@8o#^&3oi%t^tav+1gadanw-(z5+ndh(*g=p$+1dm%gt9h5%('
+SECRET_KEY = env('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -96,16 +104,19 @@ WSGI_APPLICATION = 'ecommerce_project.wsgi.application'
 # }
 
 
+
+# Use environment variables for database settings
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce_db',     
-        'USER': 'postgres',          
-        'PASSWORD': 'Gaijkanara@11', 
-        'HOST': 'localhost',         
-        'PORT': '5433',              
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST', default='localhost'),
+        'PORT': env('DB_PORT', default='5432'),
     }
 }
+
 
 
 # Password validation
@@ -139,10 +150,24 @@ USE_I18N = True
 USE_TZ = True
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'Ecommerce App <' + EMAIL_HOST_USER + '>'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS=[                       
+#     os.path.join(BASE_DIR ,'user/static'),
+# ]
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #####static 3
 STATIC_URL = '/static/'
@@ -165,9 +190,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-
-
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -177,3 +199,45 @@ REST_FRAMEWORK = {
     ),
 }
 
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': 'your-secret-key',
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+
+LOGGING = {
+    'version':1,
+    'disable_existing_loggers': False,
+    'handlers':{
+        'file':{
+            'level':'DEBUG',
+            'class':'logging.FileHandler',
+            'filename':'ecommerce_project.log',
+        },
+    },
+    'loggers':{
+        'django':{
+            'handlers':['file'],
+            'level':'DEBUG',
+            'propagate':True,
+        },
+        'shop':{
+            'handlers':['file'],
+            'level':'DEBUG',
+            'propagate':True,
+        },
+        'user':{
+            'handlers':['file'],
+            'level':'DEBUG',
+            'propagate':True,
+        },
+    },
+}

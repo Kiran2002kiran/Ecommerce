@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .forgot-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <img src="{% static 'images/login.jpg' %}" alt="Background" class="forgot-img">
+    <div class="container h-100 d-flex justify-content-center align-items-center">
+        <div class="form-container col-md-6">
+            <h3 class="text-center mb-4">Forgot Password</h3>
+
+            <div id="send-otp-form">
+                <form action="{% url 'send_otp' %}" method="post" id="otpForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Enter Your Email</label>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Send OTP</button>
+                </form>
+                <div id="otp-feedback" class="text-success mt-2" style="display: none;"></div>
+            </div>
+
+            <div id="reset-password-form" style="display: none;">
+                <form action="{% url 'reset_password' %}" method="post" id="resetForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="otp" class="form-label">Enter OTP</label>
+                        <input type="number" name="otp" class="form-control" id="otp" placeholder="Enter OTP" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">Enter New Password</label>
+                        <input type="password" name="new_password" class="form-control" id="new_password" placeholder="Enter new password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+                </form>
+                <div id="reset-feedback" class="text-success mt-2" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // jQuery for AJAX calls
+        $(document).ready(function () {
+            // Send OTP
+            $("#otpForm").on("submit", function (e) {
+                e.preventDefault(); // Prevent default form submission
+
+                const email = $("#email").val();
+                if (email) {
+                    $.ajax({
+                        url: "{% url 'send_otp' %}",
+                        type: "POST",
+                        data: {
+                            email: email,
+                            csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+                        },
+                        success: function (response) {
+                            $("#otp-feedback").text(response.message).show();
+                            $("#send-otp-form").hide();
+                            $("#reset-password-form").show();
+                        },
+                        error: function (xhr) {
+                            alert(xhr.responseJSON.error); // Show error from the backend
+                        },
+                    });
+                }
+            });
+
+            // Reset Password
+            $("#resetForm").on("submit", function (e) {
+                e.preventDefault();
+
+                const email = $("#email").val();
+                const otp = $("#otp").val();
+                const newPassword = $("#new_password").val();
+
+                if (otp && newPassword) {
+                    $.ajax({
+                        url: "{% url 'reset_password' %}",
+                        type: "POST",
+                        data: {
+                            email: email,
+                            otp: otp,
+                            new_password: newPassword,
+                            csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+                        },
+                        success: function (response) {
+                            $("#reset-feedback").text(response.message).show();
+                            $("#resetForm")[0].reset(); // Clear the form
+                        },
+                        error: function (xhr) {
+                            alert(xhr.responseJSON.error);
+                        },
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

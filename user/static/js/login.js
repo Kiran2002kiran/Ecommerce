@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const loginForm = document.querySelector("form");
+    const loginForm = document.querySelector("#loginForm");
     const usernameInput = document.querySelector("#username");
     const passwordInput = document.querySelector("#password");
 
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         
         if (!username || !password) {
-            alert("Please fill in both fields.");
+            alert("Please fill in both fields");
             return;
         }
 
@@ -29,16 +29,16 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((response) => response.json())
             .then((data) => {
                 if (data.success) {
-                    
+                    alert(data.message);
                     window.location.href = "/"; 
                 } else {
                     
-                    alert(data.message || "Invalid credentials. Please try again.");
+                    alert(data.message || "Invalid credentials. Please try again");
                 }
             })
             .catch((error) => {
                 console.error("Error:", error);
-                alert("Something went wrong. Please try again.");
+                alert("Something went wrong. Please try again");
             });
     });
 

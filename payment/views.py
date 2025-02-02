@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import Payment
 from .serializers import PaymentSerializer
+from shop.models import Product
 
 logger = logging.getLogger('payment')
 
@@ -40,3 +41,14 @@ class PaymentCreateView(APIView):
         except Exception as e:
             logger.error(f"Error creating payment: {str(e)}", exc_info=True)
             return Response({"error": "An error occurred while creating the payment."}, status=500)
+
+
+def Payment_page(request):
+    product_id = request.GET.get('product_id')
+    price = request.GET.get('price')
+    product = Product.objects.get(id=product_id)
+    context = {
+        'product': product,
+        'price': price
+    }
+    return render(request, 'payment/payment.html', context)

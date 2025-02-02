@@ -1,4 +1,6 @@
+{% extends 'user/index.html' %}
 {% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,7 +36,7 @@
     <div class="container h-100 d-flex justify-content-center align-items-center">
         <div class="form-container col-md-6">
             <h3 class="text-center mb-4">Login</h3>
-            <form action="{% url 'login' %}" method="post">
+            <form id="loginForm">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
@@ -45,11 +47,13 @@
                     <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password">
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Login</button>
-                <p class="text-center mt-3">Don't have an account? <a href="/register-page/">Register here</a>.</p>
+                <p class="text-center mt-3">Don't have an account? <a href="{% url 'register_page' %}">Register here</a></p>
+                <p class="text-center mt-3"><a href="{% url 'forgot_password' %}">Forgot password</a></p>
             </form>
         </div>
     </div>
 </body>
+{% endblock %}
 </html>
 
 

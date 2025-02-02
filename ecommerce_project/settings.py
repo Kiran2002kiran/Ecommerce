@@ -28,8 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-p@8o#^&3oi%t^tav+1gadanw-(z5+ndh(*g=p$+1dm%gt9h5%('
 SECRET_KEY = env('SECRET_KEY')
+
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -58,6 +58,9 @@ INSTALLED_APPS = [
 
 
 AUTH_USER_MODEL = 'user.User'
+
+LOGIN_URL = 'user:login'
+
 
 
 MIDDLEWARE = [
@@ -105,7 +108,6 @@ WSGI_APPLICATION = 'ecommerce_project.wsgi.application'
 
 
 
-# Use environment variables for database settings
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -116,6 +118,8 @@ DATABASES = {
         'PORT': env('DB_PORT', default='5432'),
     }
 }
+
+
 
 
 
@@ -150,6 +154,7 @@ USE_I18N = True
 USE_TZ = True
 
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -159,34 +164,31 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'Ecommerce App <' + EMAIL_HOST_USER + '>'
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-# STATIC_URL = '/static/'
-# STATICFILES_DIRS=[                       
-#     os.path.join(BASE_DIR ,'user/static'),
-# ]
-# MEDIA_URL = '/media/'
+
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #####static 3
 STATIC_URL = '/static/'
-STATICFILES_DIRS= [                       
-    BASE_DIR / 'user/static' 
+STATICFILES_DIRS = [                       
+    BASE_DIR / 'user/static',
+    BASE_DIR / 'shop/static',
+    BASE_DIR / 'payment/static',
 ]
 
+
+MEDIA_URL = '/media/'                      
+MEDIA_ROOT = BASE_DIR /'media'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'      ##stc conf  (1.2)
-# MEDIA_URL='/media/'                      
-# MEDIA_ROOT=BASE_DIR /'media'
 
 
 

@@ -16,19 +16,27 @@ from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.crypto import get_random_string
 import datetime
+import logging
 
 
+
+logger = logging.getLogger(__name__)
 
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        logger.debug(f"Received data: {request.data}")
         serializer = RegisterSerializer(data=request.data) 
         if serializer.is_valid():
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
             return redirect('login_page')
+        logger.warning(f"Registration failed: {serializer.errors}")
+        return render(request , 'user/register.html' , {'errors':'serializers.error'})
+    
+    def get(self,request):
         return render(request,'user/register.html') 
 
 
@@ -39,7 +47,8 @@ class LoginView(APIView):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
-        
+        # print(f"Received Username: {username}, Password: {password}")
+
         if not username or not password:
             return JsonResponse({'success': False, 'message': 'Username and password are required'}, status=400)
         
@@ -47,9 +56,9 @@ class LoginView(APIView):
         
         if user and user.is_active:
             login(request, user)
-            return JsonResponse({'success': True, 'message': 'Login successful'})
+            return JsonResponse({'success': True, 'message': 'Login successful'}, status=200)
         else:
-            return JsonResponse({'success': False, 'message': 'Invalid username or password'}, status=401)
+            return JsonResponse({"message": "Invalid username or password."}, status=401)
 
     def get(self, request):
         return render(request, 'user/login.html')
@@ -68,6 +77,8 @@ class UserProfileView(APIView):
 def Index(request):
     return render(request,'user/index.html')
 
+def Start(request):
+    return render(request,'user/startpage.html')
 
 
 def register_page(request):
@@ -76,6 +87,13 @@ def register_page(request):
 
 def login_page(request):
     return render(request, 'user/login.html')
+
+def Logout(request):
+    if 'user' in request.session:
+        del request.session['user']
+        return render(request,'user/index.html')
+    else:
+        return render(request,'user/index.html')
 
 
 ####Forget password....

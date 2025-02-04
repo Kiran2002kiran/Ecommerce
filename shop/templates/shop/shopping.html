@@ -1,0 +1,190 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>shop</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/bootstrap-icons.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container position-relative d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <img src="{% static 'images/main-logo.png' %}" alt="">
+        <span>.</span>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="#menu">Shop</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+      <a class="btn-getstarted" href="/index-page/">Home</a>
+      
+
+    </div>
+  </header>
+
+  <main class="main">
+    <section id="menu" class="menu section">
+
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Our Menu</h2>
+        <p><span>Welcome to our</span> <span class="description-title">Ministore</span></p>
+      </div>
+
+      <div class="container">
+        <ul class="nav nav-tabs d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
+          <li class="nav-item">
+            <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#menu-starters">
+              <h4>Mens</h4>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-breakfast">
+              <h4>Ladies</h4>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-lunch">
+              <h4>Kids</h4>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-dinner">
+              <h4>Gadgets</h4>
+            </a>
+          </li>
+
+        </ul>
+
+        <div class="tab-content" data-aos="fade-up" data-aos-delay="200">
+          <div class="tab-pane fade active show" id="menu-starters">
+            <div class="tab-header text-center">
+              <p>For</p>
+              <h3>Mens</h3>
+            </div>
+
+            <div class="row gy-5">
+              {% for product in products %}
+                {% if product.category.name == 'Mens' %}
+                  <div class="col-lg-4 menu-item">
+                    <a href="{{ product.image.url }}" class="glightbox">
+                      <img src="{{ product.image.url }}" class="menu-img img-fluid" alt="{{ product.name }}">
+                    </a>
+                    <h4>{{ product.name }}</h4>
+                    <p class="ingredients">{{ product.description }}</p>
+                    <p class="price">${{ product.price }}</p>
+                    <a href="" class="btn-getstarted" style="background-color: grey; color: red;">Add to cart</a><br>
+                    <a href="{% url 'payment_page' %}?product_id={{ product.id }}&price={{ product.price }}" class="btn-getstarted" style="background-color: red; color: white;">Buy Now</a>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="menu-breakfast">
+            <div class="tab-header text-center">
+              <p>For</p>
+              <h3>Ladies</h3>
+            </div>
+
+            <div class="row gy-5">
+              {% for product in products %}
+                {% if product.category.name == 'Ladies' %}
+                  <div class="col-lg-4 menu-item">
+                    <a href="{{ product.image.url }}" class="glightbox">
+                      <img src="{{ product.image.url }}" class="menu-img img-fluid" alt="{{ product.name }}">
+                    </a>
+                    <h4>{{ product.name }}</h4>
+                    <p class="ingredients">{{ product.description }}</p>
+                    <p class="price">${{ product.price }}</p>
+                    <a href="" class="btn-getstarted" style="background-color: grey; color: red;">Add to cart</a><br>
+                    <a href="{% url 'payment_page' %}?product_id={{ product.id }}&price={{ product.price }}" class="btn-getstarted" style="background-color: red; color: white;">Buy Now</a>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="menu-lunch">
+            <div class="tab-header text-center">
+              <p>For</p>
+              <h3>Kids</h3>
+            </div>
+
+            <div class="row gy-5">
+              {% for product in products %}
+                {% if product.category.name == 'Kids' %}
+                  <div class="col-lg-4 menu-item">
+                    <a href="{{ product.image.url }}" class="glightbox">
+                      <img src="{{ product.image.url }}" class="menu-img img-fluid" alt="{{ product.name }}">
+                    </a>
+                    <h4>{{ product.name }}</h4>
+                    <p class="ingredients">{{ product.description }}</p>
+                    <p class="price">${{ product.price }}</p>
+                    <a href="" class="btn-getstarted" style="background-color: grey; color: red;">Add to cart</a><br>
+                    <a href="{% url 'payment_page' %}?product_id={{ product.id }}&price={{ product.price }}" class="btn-getstarted" style="background-color: red; color: white;">Buy Now</a>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+        </div>
+
+          <div class="tab-pane fade" id="menu-dinner">
+            <div class="tab-header text-center">
+              <p>Our</p>
+              <h3>Gadgets</h3>
+            </div>
+
+            <div class="row gy-5">
+              {% for product in products %}
+                {% if product.category.name == 'Gadgets' %}
+                  <div class="col-lg-4 menu-item">
+                    <a href="{{ product.image.url }}" class="glightbox">
+                      <img src="{{ product.image.url }}" class="menu-img img-fluid" alt="{{ product.name }}">
+                    </a>
+                    <h4>{{ product.name }}</h4>
+                    <p class="ingredients">{{ product.description }}</p>
+                    <p class="price">${{ product.price }}</p>
+                    <a href="" class="btn-getstarted" style="background-color: grey; color: red;">Add to cart</a><br>
+                    <a href="{% url 'payment_page' %}?product_id={{ product.id }}&price={{ product.price }}" class="btn-getstarted" style="background-color: red; color: white;">Buy Now</a>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section><!-- /Menu Section -->
+
+  </main>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/aos.js' %}"></script>
+
+</body>
+{% endblock %}
+</html>

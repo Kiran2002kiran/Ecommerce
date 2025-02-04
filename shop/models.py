@@ -5,6 +5,11 @@ import logging
 
 logger = logging.getLogger('ecommerce_project')
 
+def get_default_category():
+    from shop.models import Category
+    category, created = Category.objects.get_or_create(name="Default", description="Default category")
+    return category.id
+
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -15,6 +20,8 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
+    category = models.ForeignKey('shop.Category', on_delete=models.CASCADE, default=get_default_category)
 
     def save(self, *args, **kwargs):
         try:

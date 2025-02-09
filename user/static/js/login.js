@@ -17,12 +17,14 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
         
         fetch(loginForm.action, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken"), 
+                "X-CSRFToken": csrfToken, 
             },
             body: JSON.stringify({ username: username, password: password }),
         })
@@ -30,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((data) => {
                 if (data.success) {
                     alert(data.message);
-                    window.location.href = "/"; 
+                    window.location.href = "/api/shop/shopping-page/"; 
                 } else {
                     
                     alert(data.message || "Invalid credentials. Please try again");

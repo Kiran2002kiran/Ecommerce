@@ -15,6 +15,7 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.crypto import get_random_string
+from django.contrib.auth import logout
 import datetime
 import logging
 
@@ -58,7 +59,7 @@ class LoginView(APIView):
             login(request, user)
             return JsonResponse({'success': True, 'message': 'Login successful'}, status=200)
         else:
-            return JsonResponse({"message": "Invalid username or password."}, status=401)
+            return JsonResponse({'success': False, 'message': 'Invalid username or password.'}, status=401)
 
     def get(self, request):
         return render(request, 'user/login.html')
@@ -89,11 +90,8 @@ def login_page(request):
     return render(request, 'user/login.html')
 
 def Logout(request):
-    if 'user' in request.session:
-        del request.session['user']
-        return render(request,'user/index.html')
-    else:
-        return render(request,'user/index.html')
+    logout(request)
+    return redirect('index')
 
 
 ####Forget password....

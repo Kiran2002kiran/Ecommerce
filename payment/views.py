@@ -1,12 +1,13 @@
 import logging
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import Payment
 from .serializers import PaymentSerializer
-from shop.models import Product
+from shop.models import Product 
+
 
 logger = logging.getLogger('payment')
 
@@ -52,3 +53,4 @@ def Payment_page(request):
         'price': price
     }
     return render(request, 'payment/payment.html', context)
+

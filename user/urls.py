@@ -1,7 +1,7 @@
 from django.urls import path
 from.import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import RegisterView , UserProfileView , LoginView , Index , register_page, Start, login_page , forgot_password , send_otp , reset_password , Logout
+from .views import RegisterView , UserProfileView , LoginView , Index , register_page , login_page , forgot_password , send_otp , reset_password , Logout
 
 urlpatterns = [
     path('',views.Index,name='index'),
@@ -13,7 +13,6 @@ urlpatterns = [
 
 
     
-    path('start-page/' , Start , name='start_page'),
     path('index-page/' , Index , name='index_page'),
     path('register-page/', register_page, name='register_page'),
     path('login-page/', login_page, name='login_page'),

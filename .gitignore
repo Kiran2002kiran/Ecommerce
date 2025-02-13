@@ -1,3 +1,5 @@
 .env
 
-.logecommerce_project.log
+.log
+
+.ecommerce_project.log

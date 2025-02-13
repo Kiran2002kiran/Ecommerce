@@ -78,9 +78,6 @@ class UserProfileView(APIView):
 def Index(request):
     return render(request,'user/index.html')
 
-def Start(request):
-    return render(request,'user/startpage.html')
-
 
 def register_page(request):
     return render(request, 'user/register.html')
